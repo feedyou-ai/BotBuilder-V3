@@ -16,7 +16,11 @@
     "restify": "^4.2.0",
     "rsa-pem-from-mod-exp": "^0.8.4",
     "sprintf-js": "^1.0.3",
+    "typescript": "^2.9.2",
     "url-join": "^1.1.0"
+  },
+  "scripts": {
+    "build": "cd core/src && tsc"
   },
   "devDependencies": {
     "mocha": "^2.4.5"
