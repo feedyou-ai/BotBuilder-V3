@@ -1,26 +1,62 @@
-# Bot Builder SDK
+# Bot Builder for Node.js
+[Bot Builder for Node.js](http://docs.botframework.com/builder/node/overview/) is a powerful framework for constructing bots that can handle both freeform interactions and more guided ones where the possibilities are explicitly shown to the user. It is easy to use and models frameworks like Express & Restify to provide developers with a familiar way to write Bots.
 
-The Microsoft Bot Framework provides just what you need to build and connect intelligent bots that interact naturally wherever your users are talking, from text/sms to Skype, Slack, Office 365 mail and other popular services.
+High Level Features:
 
-The Microsoft Bot Builder SDK is one of three main components of the Microsoft Bot Framework. It is a powerful, easy-to-use framework that provides a familiar way for .NET and Node.js developers to develop bots. The Bot Builder SDK provides features that make interactions between bots and users much simpler. Bot Builder also includes an emulator for debugging your bots, as well as a large set of sample bots you can use as building blocks.
+* Powerful dialog system with dialogs that are isolated and composable.
+* Built-in prompts for simple things like Yes/No, strings, numbers, enumerations.
+* Built-in dialogs that utilize powerful AI frameworks like [LUIS](http://luis.ai).
+* Bots are stateless which helps them scale.
+* Bots can run on almost any bot platform like the [Microsoft Bot Framework](http://botframework.com), [Skype](http://skype.com), and [Slack](http://slack.com).
+ 
+## Build a bot
+Create a folder for your bot, cd into it, and run npm init.
 
-![Bot Framework](https://botframework.blob.core.windows.net/web/images/bot-framework.png)
+    npm init
+    
+Get the BotBuilder and Restify modules using npm.
 
-Think of a bot as an app that users interact with in a conversational way. Bots can communicate conversationally with text, cards , or speech. A bot may be as simple as basic pattern matching with a response, or it may be a sophisticated weaving of artificial intelligence techniques with complex conversational state tracking and integration to existing business services.
+    npm install --save botbuilder
+    npm install --save restify
+    
+Create a file named app.js and say hello in a few lines of code.
+ 
+    var restify = require('restify');
+    var builder = require('botbuilder');
 
-The Bot Framework enables you to build bots that support different types of interactions with users. You can design conversations in your bot to be freeform. Your bot can also have more guided interactions where it provides the user choices or actions. The conversation can use simple text strings or more complex rich cards that contain text, images, and action buttons. And you can add natural language interactions, which let your users interact with your bots in a natural and expressive way.
+    // Create bot and add dialogs
+    var connector = new builder.ChatConnector({
+        appId: "YourAppId",
+        appPassword: "YourAppSecret"
+    });
+    var bot = new builder.UniversalBot(connector);  
+    bot.dialog('/', function (session) {
+        session.send('Hello World');
+    });
 
-Developers writing bots all face the same problems: bots require basic I/O, they must have language and dialog skills, and they must connect to users, preferably in any conversation experience and language the user chooses. The Bot Framework provides powerful tools and features to help solve these problems and more with features like automatic translation to more than 30 languages, user and conversation state management, debugging tools, an embeddable web chat control and a way for users to discover, try, and add bots to the conversation experiences they love.
+    // Setup Restify Server
+    var server = restify.createServer();
+    server.post('/api/messages', connector.listen());
+    server.listen(process.env.port || 3978, function () {
+        console.log('%s listening to %s', server.name, server.url); 
+    });
 
-**[Review the documentation](http://docs.microsoft.com/en-us/bot-framework)** to get started with the Bot Builder SDK!
+## Test your bot
+Use the [Bot Framework Emulator](http://docs.botframework.com/connector/tools/bot-framework-emulator/) to test your bot on localhost. 
 
-Get started quickly with our samples:
+Install the emulator from [here](http://aka.ms/bf-bc-emulator) and then start your bot in a console window.
 
-* Bot Builder samples [GitHub repo](https://github.com/Microsoft/BotBuilder-Samples)
-* More samples are available within the SDK [C#](https://github.com/Microsoft/BotBuilder/tree/master/CSharp/Samples), [Node.js](https://github.com/Microsoft/BotBuilder/tree/master/Node/examples)
+    node app.js
+    
+Start the emulator and say "hello" to your bot.
 
-Join the conversation on **[Gitter](https://gitter.im/Microsoft/BotBuilder)**.
+## Publish your bot
+Deploy your bot to the cloud and then [register it](http://docs.botframework.com/connector/getstarted/#registering-your-bot-with-the-microsoft-bot-framework) with the Microsoft Bot Framework. If you're deploying your bot to Microsoft Azure you can use this great guide for [Publishing a Node.js app to Azure using Continuous Integration](https://blogs.msdn.microsoft.com/sarahsays/2015/08/31/building-your-first-node-js-app-and-publishing-to-azure/).
 
-See all the support options **[here](https://docs.microsoft.com/en-us/bot-framework/resources-support)**.
+NOTE: When you register your bot with the Bot Framework you'll want to update the appId & appSecret for both your bot and the emulator with the values assigned to you by the portal.
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+## Dive deeper
+Learn how to build great bots.
+
+* [Core Concepts Guide](http://docs.botframework.com/builder/node/guides/core-concepts/)
+* [Bot Builder for Node.js Reference](https://docs.botframework.com/en-us/node/builder/chat-reference/modules/_botbuilder_d_.html)
