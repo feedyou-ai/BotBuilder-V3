@@ -352,6 +352,15 @@ export class Session extends events.EventEmitter {
         return this;
     }
 
+    public endTurn() {
+        // TODO if batch timeout active, plan turn end after it is finished
+        setTimeout(() => {
+            const address = this.message.address as any
+            console.log('!!!!! CALLING MESSAGE.END TURN !!!!!', address.endTurn)
+            address.endTurn && address.endTurn()
+        }, this.options.autoBatchDelay*2)        
+    }
+
     /** Ends the conversation with the user. */
     public endConversation(message?: string|string[]|IMessage|IIsMessage, ...args: any[]): this {
         // Unpack message

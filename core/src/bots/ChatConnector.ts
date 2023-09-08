@@ -706,22 +706,37 @@ export class ChatConnector implements IConnector, IBotStorage {
             this.prepIncomingMessage(msg);
             logger.info(msg, 'ChatConnector: message received.');
 
-            this.onDispatchEvents([msg], (err, body, status) => {
-                if (err) {
-                    res.status(500);
-                    res.end();
-                    next();
-                    logger.error('ChatConnector: error dispatching event(s) - ', err.message || '');
-                } else if (body) {
-                    res.send(status || 200, body);
-                    res.end();
-                    next();
+            let done: () => void = null
+            // @ts-ignore
+            msg.address.endTurn = () => {
+                if (done) {
+                    console.warn('message.address.endTurn called with done set')
+                    done()
                 } else {
-                    res.status(status || 200);
-                    res.end();
-                    next();
+                    console.warn('message.address.endTurn called w/o done set')
                 }
-            })
+            }
+
+            this.onDispatchEvents([msg], function (err, body, status) {
+                done = () => {
+                    if (err) {
+                        res.status(500);
+                        res.end();
+                        next();
+                        logger.error('ChatConnector: error dispatching event(s) - ', err.message || '');
+                    }
+                    else if (body) {
+                        res.send(status || 200, body);
+                        res.end();
+                        next();
+                    }
+                    else {
+                        res.status(status || 200);
+                        res.end();
+                        next();
+                    }
+                }
+            });
         } catch (e) {
             console.error(e instanceof Error ? (<Error>e).stack : e.toString());
             res.status(500);
