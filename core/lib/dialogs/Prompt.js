@@ -188,6 +188,7 @@ var Prompt = (function (_super) {
                     sendMsg(prompt_1);
                 }
             }
+            session.endTurn();
         }
         function sendMsg(msg) {
             if (turnZero) {
@@ -211,7 +212,7 @@ var Prompt = (function (_super) {
                 });
             }
             if (!msg.inputHint) {
-                msg.inputHint = Message_1.InputHint.expectingInput;
+                msg.inputHint = options.inputHint || Message_1.InputHint.expectingInput;
             }
             session.send(msg);
         }

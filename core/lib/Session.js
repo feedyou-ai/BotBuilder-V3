@@ -267,6 +267,14 @@ var Session = (function (_super) {
         dialog.begin(this, args);
         return this;
     };
+    Session.prototype.endTurn = function () {
+        var _this = this;
+        setTimeout(function () {
+            var address = _this.message.address;
+            console.log('!!!!! CALLING MESSAGE.END TURN !!!!!', address.endTurn);
+            address.endTurn && address.endTurn();
+        }, this.options.autoBatchDelay * 2);
+    };
     Session.prototype.endConversation = function (message) {
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {

@@ -551,23 +551,35 @@ var ChatConnector = (function () {
         try {
             this.prepIncomingMessage(msg);
             logger.info(msg, 'ChatConnector: message received.');
-            this.onDispatchEvents([msg], function (err, body, status) {
-                if (err) {
-                    res.status(500);
-                    res.end();
-                    next();
-                    logger.error('ChatConnector: error dispatching event(s) - ', err.message || '');
-                }
-                else if (body) {
-                    res.send(status || 200, body);
-                    res.end();
-                    next();
+            var done_1 = null;
+            msg.address.endTurn = function () {
+                if (done_1) {
+                    console.warn('message.address.endTurn called with done set');
+                    done_1();
                 }
                 else {
-                    res.status(status || 200);
-                    res.end();
-                    next();
+                    console.warn('message.address.endTurn called w/o done set');
                 }
+            };
+            this.onDispatchEvents([msg], function (err, body, status) {
+                done_1 = function () {
+                    if (err) {
+                        res.status(500);
+                        res.end();
+                        next();
+                        logger.error('ChatConnector: error dispatching event(s) - ', err.message || '');
+                    }
+                    else if (body) {
+                        res.send(status || 200, body);
+                        res.end();
+                        next();
+                    }
+                    else {
+                        res.status(status || 200);
+                        res.end();
+                        next();
+                    }
+                };
             });
         }
         catch (e) {

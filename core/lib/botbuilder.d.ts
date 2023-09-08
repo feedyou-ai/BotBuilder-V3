@@ -2038,6 +2038,8 @@ export class Session {
      */
     endConversation(message?: TextOrMessageType, ...args: any[]): Session;
 
+    endTurn(): Session
+
     /**
      * Ends the current dialog and optionally sends a message to the user. The parent will be resumed with an [IDialogResult.resumed](/en-us/node/builder/chat-reference/interfaces/_botbuilder_d_.idialogresult.html#resumed)
      * reason of [completed](/en-us/node/builder/chat-reference/enums/_botbuilder_d_.resumereason.html#completed).

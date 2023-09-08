@@ -1,5 +1,4 @@
 "use strict";
-// feedyou
 Object.defineProperty(exports, "__esModule", { value: true });
 var Session_1 = require("./Session");
 exports.Session = Session_1.Session;
@@ -64,8 +63,7 @@ var IntentRecognizerSet_1 = require("./dialogs/IntentRecognizerSet");
 exports.IntentRecognizerSet = IntentRecognizerSet_1.IntentRecognizerSet;
 exports.RecognizeOrder = IntentRecognizerSet_1.RecognizeOrder;
 var LocalizedRegExpRecognizer_1 = require("./dialogs/LocalizedRegExpRecognizer");
-exports.LocalizedRegExpRecognizer =
-  LocalizedRegExpRecognizer_1.LocalizedRegExpRecognizer;
+exports.LocalizedRegExpRecognizer = LocalizedRegExpRecognizer_1.LocalizedRegExpRecognizer;
 var LuisRecognizer_1 = require("./dialogs/LuisRecognizer");
 exports.LuisRecognizer = LuisRecognizer_1.LuisRecognizer;
 var Prompt_1 = require("./dialogs/Prompt");
