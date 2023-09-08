@@ -249,6 +249,7 @@ export class Prompt<T extends IPromptFeatures>  extends Dialog {
                     sendMsg(<IMessage>prompt);
                 }
             }
+            session.endTurn()
         }
 
         function sendMsg(msg: IMessage) {
@@ -275,7 +276,7 @@ export class Prompt<T extends IPromptFeatures>  extends Dialog {
 
             // Ensure input hint set
             if (!msg.inputHint) {
-                msg.inputHint = InputHint.expectingInput;
+                msg.inputHint = options.inputHint || InputHint.expectingInput;
             }
             session.send(msg);
         }
